@@ -5,18 +5,14 @@ def parse_game(game):
     game_id = game[0]
     game = game[1:]
     
-    test_map = dict(zip(['blue', 'red', 'green'], [14, 13, 12]))
-
+    test_map = dict(zip(['blue', 'red', 'green'], [14, 12, 13]))
+    
     for term in range(0, len(game)-1):
-        if game[term + 1] == "blue":
-            if int(game[term]) > 14:
-                return (game_id, False)
-        if game[term + 1] == "red":
-            if int(game[term]) > 12:
-                return (game_id, False)
-        if game[term + 1] == "green":
-            if int(game[term]) > 13:
-                return (game_id, False)
+        for color in test_map.keys():
+            if game[term + 1] == color:
+                if int(game[term]) > test_map[color]:
+                    return (game_id, False)
+
     return (game_id, True)
 
 def solve_part_one(filename):
@@ -25,19 +21,15 @@ def solve_part_one(filename):
 def parse_game_part_two(game):
     game_id = game[0]
     game = game[1:]
-    
-    max_blue = 0
-    max_red = 0
-    max_green = 0
+
+    test_map = dict(zip(['blue', 'red', 'green'], [0, 0, 0]))
 
     for term in range(0, len(game)-1):
-        if game[term + 1] == "blue":
-            max_blue = max(max_blue, int(game[term]))
-        if game[term + 1] == "red":
-            max_red = max(max_red, int(game[term]))
-        if game[term + 1] == "green":
-            max_green = max(max_green, int(game[term]))
-    return (game_id, max_blue, max_green, max_red)
+        for color in test_map.keys():
+            if game[term + 1] == color:
+                test_map[color] = max(test_map[color], int(game[term]))
+
+    return (game_id, test_map['blue'], test_map['green'], test_map['red'])
 
 def solve_part_two(filename):
     return sum(list(map(lambda game: game[1]*game[2]*game[3], list(map(lambda x: parse_game_part_two(x), [line.strip("\r\n").replace(":","").replace(",", "").replace(";", "").split(" ")[1:] for line in open(filename, "r")])))))
