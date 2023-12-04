@@ -16,7 +16,8 @@ def parse_game(game):
     return (game_id, True)
 
 def solve_part_one(filename):
-    return sum(list(map(lambda game: int(game[0]) if game[1] else 0, list(map(lambda x: parse_game(x), [line.strip("\r\n").replace(":","").replace(",", "").replace(";", "").split(" ")[1:] for line in open(filename, "r")])))))
+    return sum(list(map(lambda game: int(game[0]) if game[1] else 0, list(map(lambda x: parse_game(x), 
+            [line.strip("\r\n").replace(":","").replace(",", "").replace(";", "").split(" ")[1:] for line in open(filename, "r")])))))
     
 def parse_game_part_two(game):
     game_id = game[0]
@@ -32,7 +33,8 @@ def parse_game_part_two(game):
     return (game_id, test_map['blue'], test_map['green'], test_map['red'])
 
 def solve_part_two(filename):
-    return sum(list(map(lambda game: game[1]*game[2]*game[3], list(map(lambda x: parse_game_part_two(x), [line.strip("\r\n").replace(":","").replace(",", "").replace(";", "").split(" ")[1:] for line in open(filename, "r")])))))
+    return sum(list(map(lambda game: game[1]*game[2]*game[3], list(map(lambda x: parse_game_part_two(x), 
+            [line.strip("\r\n").replace(":","").replace(",", "").replace(";", "").split(" ")[1:] for line in open(filename, "r")])))))
 
 print(solve_part_one("day2.txt"))
 print(solve_part_two("day2.txt"))
