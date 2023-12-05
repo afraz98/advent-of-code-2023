@@ -39,4 +39,35 @@ def solve_part_one(filename):
     map = [[char for char in line.strip("\r\n")] for line in open(filename, 'r')]
     return sum([int(part_number) for part_number in find_numbers_with_symbols_adjacent(find_part_numbers(map), find_symbols(map))])
 
+def find_gears(map):
+    gears = []
+    for row in range(0, len(map)):
+        for column in range(0, len(map[0])):
+            if map[row][column] == "*":
+                gears.append((map[row][column], row, column))
+    return gears
+
+def find_gear_ratios(part_numbers, gears):
+    gear_ratios = []
+    for gear in gears:
+        gear_ratio = 1
+        ratios = []
+        _, gear_x, gear_y = gear
+        for number in part_numbers:
+            number, coordinates = number
+            
+            if any([coord in adjacent_coordinates(gear_x, gear_y) for coord in coordinates]):
+                ratios.append(number)
+            
+        if len(ratios) > 1:
+            for ratio in ratios:
+                gear_ratio *= ratio
+            gear_ratios.append(gear_ratio)
+    return gear_ratios
+
+def solve_part_two(filename):
+    map = [[char for char in line.strip("\r\n")] for line in open(filename, 'r')]
+    return sum([int(part_number) for part_number in find_gear_ratios(find_part_numbers(map), find_gears(map))])
+
 print(solve_part_one("day3.txt"))
+print(solve_part_two("day3.txt"))
