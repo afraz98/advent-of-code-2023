@@ -32,9 +32,7 @@ def solve_part_two(filename):
     
     time = ''.join(list(filter(lambda x: x!= '', input[0])))
     distance = ''.join(list(filter(lambda x: x!='', input[1])))
-
-    print(int(time), int(distance))
-
+    
     return find_methods_to_beat_record([(int(time), int(distance))])
 
 print(solve_part_one("day6.txt"))
