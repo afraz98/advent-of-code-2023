@@ -1,15 +1,14 @@
 
 card_ranking = "23456789TJQKA"
+joker_card_ranking = "J23456789TQKA"
 
 def order(card):
     return card_ranking.index(card)
 
 def is_five_of_a_kind(cards):
-    # len(set(cards)) == 1?
     return cards[0] == cards[1] == cards[2] == cards[3] == cards[4]
 
 def is_four_of_a_kind(cards):
-    # len(set(cards)) == 2?
     for i in range(0,2):
         if cards[i] == cards[i+1] == cards[i+2] == cards[i+3]:
             return True
@@ -24,7 +23,6 @@ def is_full_house(cards):
     return False
 
 def is_three_of_a_kind(cards):
-    # len(set(cards)) == 2?
     for i in range(0, 3):
         if cards[i] == cards[i+1] == cards[i+2]:
             return True
@@ -47,7 +45,7 @@ def is_pair(cards):
     return False
 
 def rank(hand):
-    cards, bets = hand
+    cards, bet = hand
     
     # Sort each hand by lexicographical order before sorting by class
     cards = ''.join(sorted(cards, key=order))
@@ -68,14 +66,42 @@ def rank(hand):
     # High card
     return 0
 
+def find_best_possible_hand(cards):
+    # TODO: Find possible hand with N wildcards (N > 0)
+    return cards
+
+def joker_rank(hand):
+    cards, bet = hand
+    
+    # Sort each hand by lexicographical order before sorting by class
+    cards = ''.join(sorted(cards, key=order))
+    
+    # No joker card present
+    if 'J' not in cards:
+        return rank(hand)
+    
+    cards = find_best_possible_hand(cards)
+    return rank((cards, bet))
+
 def solve_part_one(filename):
     input = [line.strip("\r\n").split(" ") for line in open(filename, "r")]
 
     # Sort by the class of the hand. 
     # Five of a kind > Four of a kind > Full house > Three of a kind > Two pair > One Pair > High Card
-    sorted_hands = sorted(input, key=lambda x: (rank(x), [card_ranking.index(c) for c in x[0]]))
-    
+    sorted_hands = sorted(input, key=lambda hand: (rank(hand), [card_ranking.index(card) for card in hand[0]]))
+
     # Sort by the rank of each card
-    return sum([(int(sorted_hands.index(j))+1)*int(j[1]) for j in sorted_hands])
+    return sum([(int(sorted_hands.index(hand))+1)*int(hand[1]) for hand in sorted_hands])
+
+def solve_part_two(filename):
+    input = [line.strip("\r\n").split(" ") for line in open(filename, "r")]
+
+    # Sort by the class of the hand. 
+    # Five of a kind > Four of a kind > Full house > Three of a kind > Two pair > One Pair > High Card
+    sorted_hands = sorted(input, key=lambda hand: (joker_rank(hand), [joker_card_ranking.index(card) for card in hand[0]]))
+
+    # Sort by the rank of each card
+    return sum([(int(sorted_hands.index(hand))+1)*int(hand[1]) for hand in sorted_hands])
 
 print(solve_part_one("day7.txt"))
+print(solve_part_two("day7.txt"))
