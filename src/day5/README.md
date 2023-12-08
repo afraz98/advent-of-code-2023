@@ -67,6 +67,7 @@ Any source numbers that aren't mapped correspond to the same destination number.
 
 So, the entire list of seed numbers and their corresponding soil numbers looks like this:
 
+```
 seed  soil
 0     0
 1     1
@@ -80,6 +81,7 @@ seed  soil
 97    99
 98    50
 99    51
+```
 
 With this map, you can look up the soil number required for each initial seed number:
 
