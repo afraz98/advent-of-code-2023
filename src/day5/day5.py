@@ -8,7 +8,7 @@ def parse_next_map(input):
     mappings = []
     while(input[0] != "\n"):
         dest_start, src_start, step = [int(number) for number in input[0].strip("\n").split(" ")]
-        mappings.append((list(range(src_start, src_start + step)), list(range(dest_start, dest_start + step))))
+        mappings.append((range(src_start, src_start + step), range(dest_start, dest_start + step)))
         input = input[1:]
     return mappings, input
 
@@ -59,4 +59,4 @@ def solve_part_one(filename):
 
     return min(values)
 
-print(solve_part_one("day5_test.txt"))
+print(solve_part_one("day5.txt"))
