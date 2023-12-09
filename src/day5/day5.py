@@ -4,6 +4,9 @@ def convert_value(value, mappings):
             return destinations[sources.index(value)]
     return value
 
+def convert_value_ranges():
+    pass
+
 def parse_next_map(input):
     mappings = []
     while(input[0] != "\n"):
@@ -22,41 +25,34 @@ def solve_part_one(filename):
     mappings = []   
     input = input[2:]
 
-    # Process seed to soil map
-    mappings, input = parse_next_map(input)
-    values = [convert_value(seed, mappings) for seed in values]
-    input = input[2:]
-
-    # Process soil to fertilizer map
-    mappings, input = parse_next_map(input)
-    values = [convert_value(soil, mappings) for soil in values]
-    input = input[2:]
-
-    # Process fertilizer to water map
-    mappings, input = parse_next_map(input)
-    values = [convert_value(fertilizer, mappings) for fertilizer in values]
-    input = input[2:]
-
-    # Process water to light map
-    mappings, input = parse_next_map(input)
-    values = [convert_value(water, mappings) for water in values]
-    input = input[2:]
-
-    # Process light to temperature map
-    mappings, input = parse_next_map(input)
-    values = [convert_value(light, mappings) for light in values]
-    input = input[2:]
-
-    # Process temperature to humidity map
-    mappings, input = parse_next_map(input)
-    values = [convert_value(temperature, mappings) for temperature in values]
-    input = input[2:]
-
-    # Process humidity to location map
-    mappings, input = parse_next_map(input)
-    values = [convert_value(humidity, mappings) for humidity in values]
-    input = input[2:]
+    while(input):
+        mappings, input = parse_next_map(input)
+        values = [convert_value(seed, mappings) for seed in values]
+        input = input[2:]
 
     return min(values)
 
+# Work in progress
+# This could probably be optimized but I'm tired
+def solve_part_two(filename):
+    input = [line for line in open(filename, "r")]
+
+    ranges = [int(val) for val in input[0].strip("\n").split(": ")[1].split(" ")]
+    value_ranges = []
+    # Process the list of seeds
+    for i in range(0, len(ranges)-1):
+        value_ranges.append(range(ranges[i], ranges[i+1]))
+    input = input[1:]
+
+    mappings = []   
+    input = input[2:]
+
+    while(input):
+        mappings, input = parse_next_map(input)
+        value_ranges = [convert_value(seed, mappings) for seed in value_ranges]
+        input = input[2:]
+
+    return min(value_ranges)
+
 print(solve_part_one("day5.txt"))
+print(solve_part_two("day5.txt"))
