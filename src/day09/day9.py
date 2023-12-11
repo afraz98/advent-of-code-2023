@@ -7,7 +7,7 @@ def process_differences(line):
         processed_lines.append(temp)
     return processed_lines
 
-def extrapolate_value(processed_differences):
+def extrapolate_future_value(processed_differences):
     for index in list(reversed(range(0, len(processed_differences)))):
         if(index == len(processed_differences)-1):
             processed_differences[index].append(0)
@@ -15,15 +15,30 @@ def extrapolate_value(processed_differences):
             processed_differences[index].append(processed_differences[index+1][-1] + processed_differences[index][-1])
     return processed_differences[0][-1]
 
+
+def extrapolate_past_value(processed_differences):
+    for index in list(reversed(range(0, len(processed_differences)))):
+        if(index == len(processed_differences)-1):
+            processed_differences[index] = [0] + processed_differences[index]
+        else:
+            processed_differences[index] = [processed_differences[index][0] - processed_differences[index+1][0]] + processed_differences[index]
+    return processed_differences[0][0]
+
 def solve_part_one(filename):
     extrapolated_values = []
     lines = [[int(value) for value in line.strip("\n").split(" ")] for line in open(filename, "r")]    
     for line in lines:
         processed_differences = process_differences(line)
-        extrapolated_values.append(extrapolate_value(processed_differences))
+        extrapolated_values.append(extrapolate_future_value(processed_differences))
     return sum(extrapolated_values)
 
 def solve_part_two(filename):
-    pass
+    extrapolated_values = []
+    lines = [[int(value) for value in line.strip("\n").split(" ")] for line in open(filename, "r")]    
+    for line in lines:
+        processed_differences = process_differences(line)
+        extrapolated_values.append(extrapolate_past_value(processed_differences))
+    return sum(extrapolated_values)
 
 print(solve_part_one("day9.txt"))
+print(solve_part_two("day9.txt"))
