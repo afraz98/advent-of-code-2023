@@ -1,27 +1,29 @@
 def process_differences(line):
-    processed_lines = []
+    processed_lines = [line]
     temp = line
-    while(temp != [0 for line in range(0, len(line))]):
+    
+    while(not all([temp[i] == 0 for i in range(0, len(temp))])):
         temp = [temp[i+1] - temp[i] for i in range(0, len(temp)-1)]
         processed_lines.append(temp)
     return processed_lines
 
-def solve_part_one(filename):
-    lines = [[int(value) for value in line.strip("\n").split(" ")] for line in open(filename, "r")]
-    processed_lines = [process_differences(line) for line in lines]
-    print(processed_lines)
+def extrapolate_value(processed_differences):
+    for index in list(reversed(range(0, len(processed_differences)))):
+        if(index == len(processed_differences)-1):
+            processed_differences[index].append(0)
+        else:
+            processed_differences[index].append(processed_differences[index+1][-1] + processed_differences[index][-1])
+    return processed_differences[0][-1]
 
+def solve_part_one(filename):
+    extrapolated_values = []
+    lines = [[int(value) for value in line.strip("\n").split(" ")] for line in open(filename, "r")]    
+    for line in lines:
+        processed_differences = process_differences(line)
+        extrapolated_values.append(extrapolate_value(processed_differences))
+    return sum(extrapolated_values)
 
 def solve_part_two(filename):
     pass
 
-line = [0, 3, 6, 9, 12, 15]
-# print(line)
-# line = [line[i+1] - line[i] for i in range(0, len(line)-1)]
-# print(line)
-# line = [line[i+1] - line[i] for i in range(0, len(line)-1)]
-# print(line)
-
-print(process_differences(line))
-
-# solve_part_one("day9_test.txt")
+print(solve_part_one("day9.txt"))
