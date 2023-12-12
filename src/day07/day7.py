@@ -1,6 +1,15 @@
-
 card_ranking = "23456789TJQKA"
 joker_card_ranking = "J23456789TQKA"
+
+def nth_most_common(cards):
+    return list(reversed(sorted([(card, cards.count(card)) for card in list(set(cards))], key=lambda x: x[1])))
+
+def replace_jokers(cards):
+    if cards == 'JJJJJ':
+        return cards
+    # Find the most common card in the hand that isn't a joker
+    card_to_replace = list(map(lambda occurrences: occurrences[0], filter(lambda occurrences: occurrences[0] != "J", nth_most_common(cards))))[0]
+    return cards.replace("J", card_to_replace)
 
 def order(card):
     return card_ranking.index(card)
@@ -75,12 +84,7 @@ def joker_rank(hand):
     
     # Sort each hand by lexicographical order before sorting by class
     cards = ''.join(sorted(cards, key=order))
-    
-    # No joker card present
-    if 'J' not in cards:
-        return rank(hand)
-    
-    cards = find_best_possible_hand(cards)
+    cards = replace_jokers(cards)
     return rank((cards, bet))
 
 def solve_part_one(filename):
