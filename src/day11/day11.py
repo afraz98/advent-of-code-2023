@@ -1,20 +1,12 @@
 def solve(filename, factor):
     image = [[char for char in line.strip('\n')] for line in open(filename, 'r')]
     
-    empty_rows = set()
     # Find empty rows (no '#')
-    for i in range(0, len(image)):
-        if '#' not in image[i]:
-            empty_rows.add(i)
-    print(empty_rows)
+    empty_rows = set(list(filter(lambda row: '#' not in image[row], range(0, len(image)))))
 
     # Find empty columns (no '#')
-    empty_cols = set()
-    for i in range(0, len(image[0])):
-        col = [image[j][i] for j in range(len(image))]
-        if '#' not in col:
-            empty_cols.add(i)
-    print(empty_cols)
+    cols = [[image[j][i] for j in range(len(image))] for i in range(0, len(image[0]))]
+    empty_cols = set(list(filter(lambda col: '#' not in cols[col], range(0, len(cols)))))
 
     galaxies = set()
     # Find galaxies
@@ -26,6 +18,7 @@ def solve(filename, factor):
 
     for galaxy in galaxies:
         for other_galaxy in galaxies - set([galaxy]):
+            # TODO: filter out distances that have already been calculated to avoid double calculating
             distance = abs(galaxy[0] - other_galaxy[0]) + abs(galaxy[1] - other_galaxy[1])
             for row in empty_rows:
                 if galaxy[0] < row < other_galaxy[0] or other_galaxy[0] < row < galaxy[0]:
