@@ -93,6 +93,16 @@ def solve_part_one(filename):
 def solve_part_two(filename):
     # TODO: Probably want to implement something similar to what is described here:
     # https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
+    
+    maze = [line for line in open(filename, 'r')]
+    
+    for (dx,dy) in [up, down, left, right]:
+        result = traverse_maze(maze, find_start(maze), (dx,dy))
+        if result is not None:
+            break
+
+    _, visited = result
+    print(visited)
     pass
 
 
