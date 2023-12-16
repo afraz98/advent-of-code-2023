@@ -91,11 +91,14 @@ def solve_part_one(filename):
     print(result[0] // 2)
 
 def solve_part_two(filename):
-    # TODO: Probably want to implement something similar to what is described here:
-    # https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
-    
+    # TODO: (1) Probably want to implement something similar to what is described here:
+    #           https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
+    #       (2) Or a Flood-Fill algorithm? https://www.geeksforgeeks.org/flood-fill-algorithm/
+    #       (3) Or Pick's theorem? https://en.wikipedia.org/wiki/Pick's_theorem
+    #       (4) Or the Shoelace formula? https://en.wikipedia.org/wiki/Shoelace_formula
     maze = [line for line in open(filename, 'r')]
-    
+    highlighted_maze = [[character for character in line] for line in open(filename, 'r')]
+
     for (dx,dy) in [up, down, left, right]:
         result = traverse_maze(maze, find_start(maze), (dx,dy))
         if result is not None:
@@ -103,8 +106,14 @@ def solve_part_two(filename):
 
     _, visited = result
     print(visited)
+
+    for coordinate in visited:
+        highlighted_maze[coordinate[0]][coordinate[1]] = 'X'
+    
+    for i in range(0, len(highlighted_maze)):
+        for j in range(0, len(highlighted_maze[0])):
+            print(highlighted_maze[i][j], end='')
     pass
-
-
+    
 solve_part_one("day10.txt")
-solve_part_two("day10.txt")
+solve_part_two("day10_test_2.txt")
