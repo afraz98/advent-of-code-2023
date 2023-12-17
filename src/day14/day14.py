@@ -1,21 +1,11 @@
 def calculate_load(map, rock):
     return len(map) - rock[0]
 
-def solve_part_one(filename):
-    map = [[character for character in line.strip('\n')] for line in open(filename, 'r')]
-    
-    round_rocks = []
-    for row in range(len(map)):
-        for col in range(0, len(map[0])):
-            if map[row][col] == "O":
-                round_rocks.append((row, col))
+def display_map(map):
+    for i in range(0, len(map)):
+        print(map[i])
 
-    square_rocks = []
-    for row in range(len(map)):
-        for col in range(0, len(map[0])):
-            if map[row][col] == "#":
-                square_rocks.append((row, col))
-    
+def tilt_rocks_up(map, round_rocks):
     for i in range(len(round_rocks)):
         rock_y, rock_x = round_rocks[i]
         while rock_y > 0 and map[rock_y - 1][rock_x] == ".":
@@ -25,10 +15,67 @@ def solve_part_one(filename):
         round_rocks[i] = (rock_y, rock_x)
         map[rock_y][rock_x] = 'O'
 
+def tilt_rocks_down(map, round_rocks):
+    for i in reversed(range(len(round_rocks))):
+        rock_y, rock_x = round_rocks[i]
+        while rock_y < len(map)-1 and map[rock_y + 1][rock_x] == ".":
+            map[rock_y][rock_x] = "."
+            rock_y = rock_y + 1
+    
+        round_rocks[i] = (rock_y, rock_x)
+        map[rock_y][rock_x] = 'O'
+
+def tilt_rocks_left(map, round_rocks):
+    for i in range(len(round_rocks)):
+        rock_y, rock_x = round_rocks[i]
+        while rock_x > 0 and map[rock_y][rock_x - 1] == ".":
+            map[rock_y][rock_x] = "."
+            rock_x = rock_x - 1
+    
+        round_rocks[i] = (rock_y, rock_x)
+        map[rock_y][rock_x] = 'O'
+
+def tilt_rocks_right(map, round_rocks):
+    for i in reversed(range(len(round_rocks))):
+        rock_y, rock_x = round_rocks[i]
+        while rock_x < len(map[0])-1 and map[rock_y][rock_x + 1] == ".":
+            map[rock_y][rock_x] = "."
+            rock_x = rock_x + 1
+    
+        round_rocks[i] = (rock_y, rock_x)
+        map[rock_y][rock_x] = 'O'
+
+def solve_part_one(filename):
+    map = [[character for character in line.strip('\n')] for line in open(filename, 'r')]
+    
+    round_rocks = []
+    for row in range(len(map)):
+        for col in range(0, len(map[0])):
+            if map[row][col] == "O":
+                round_rocks.append((row, col))
+
+    tilt_rocks_up(map, round_rocks)    
+    display_map(map)
     return sum([calculate_load(map, rock) for rock in round_rocks])
 
+# Work in progress
 def solve_part_two(filename):
-    return 0
+    map = [[c for c in line.strip('\n')] for line in open(filename, 'r')]
+    
+    round_rocks = []
+    for row in range(len(map)):
+        for col in range(0, len(map[0])):
+            if map[row][col] == "O":
+                round_rocks.append((row, col))
+    
+    # NWSE    
+    tilt_rocks_up(map, round_rocks)
+    tilt_rocks_left(map, round_rocks)
+    tilt_rocks_down(map, round_rocks)
+    tilt_rocks_right(map, round_rocks)
+    display_map(map)
 
-print(solve_part_one("day14.txt"))
+    return sum([calculate_load(map, rock) for rock in round_rocks])
+
+print(solve_part_one("day14_test.txt"))
 print(solve_part_two("day14_test.txt"))

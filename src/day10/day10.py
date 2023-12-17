@@ -77,6 +77,51 @@ def traverse_maze(data, start, direction):
         distance += 1
     return (distance, visited)
 
+def is_valid(maze, number_rows, number_columns, x, y, previous_color, new_color):
+    if x < 0 or x >= number_rows-1 or y < 0 or y >= number_columns-1: 
+        return False
+    if maze[x][y]!= previous_color or maze[x][y]== new_color:
+        return False
+    return True
+
+# Flood Fill algorithm adapted from here: https://www.geeksforgeeks.org/flood-fill-algorithm/
+def flood_fill_maze(map, number_rows, number_columns, x, y, previous_color, new_color):
+    queue = []
+     
+    # Append the position of starting pixel of the component
+    queue.append([x, y])
+ 
+    # Color the pixel with the new color
+    map[x][y] = new_color
+ 
+    # While the queue is not empty, i.e. the whole component has the 'previous' color
+    while queue != []:
+         
+        # Dequeue the front node
+        currPixel = queue.pop()
+         
+        posX = currPixel[0]
+        posY = currPixel[1]
+         
+        # Check if the adjacent pixels are valid
+        if is_valid(map, number_rows, number_columns, posX + 1, posY, previous_color, new_color):
+             
+            # Color with new_color if valid and enqueue
+            map[posX + 1][posY] = new_color
+            queue.append([posX + 1, posY])
+         
+        if is_valid(map, number_rows, number_columns, posX-1, posY, previous_color, new_color):
+            map[posX-1][posY]= new_color
+            queue.append([posX-1, posY])
+         
+        if is_valid(map, number_rows, number_columns, posX, posY + 1, previous_color, new_color):
+            map[posX][posY + 1]= new_color
+            queue.append([posX, posY + 1])
+         
+        if is_valid(map, number_rows, number_columns, posX, posY-1, previous_color, new_color):
+            map[posX][posY-1]= new_color
+            queue.append([posX, posY-1])
+    pass
 
 def solve_part_one(filename):
     # *Heavily* based on a post by 'RedTwinkleToes' on the solution page for Day 10.
@@ -88,16 +133,21 @@ def solve_part_one(filename):
         if result is not None:
             break
 
-    print(result[0] // 2)
+    return result[0] // 2
+
+def find_interior_points(points, area):
+    return area - (len(points) // 2) + 1
+
+def area(points):
+    # Calculate area via Shoelace formula: https://en.wikipedia.org/wiki/Shoelace_formula
+    area = 0
+    for i in range(len(points)):
+        area += (points[i % len(points)][0]*points[(i+1) % len(points)][0]) - (points[i % len(points)][1] * points[(i+1) % len(points)][1])
+    return area // 2
 
 def solve_part_two(filename):
-    # TODO: (1) Probably want to implement something similar to what is described here:
-    #           https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
-    #       (2) Or a Flood-Fill algorithm? https://www.geeksforgeeks.org/flood-fill-algorithm/
-    #       (3) Or Pick's theorem? https://en.wikipedia.org/wiki/Pick's_theorem
-    #       (4) Or the Shoelace formula? https://en.wikipedia.org/wiki/Shoelace_formula
     maze = [line for line in open(filename, 'r')]
-    highlighted_maze = [[character for character in line] for line in open(filename, 'r')]
+    highlighted_maze = [[character for character in line.strip('\n')] for line in open(filename, 'r')]
 
     for (dx,dy) in [up, down, left, right]:
         result = traverse_maze(maze, find_start(maze), (dx,dy))
@@ -105,15 +155,20 @@ def solve_part_two(filename):
             break
 
     _, visited = result
-    print(visited)
+    visited = list(visited)
 
     for coordinate in visited:
         highlighted_maze[coordinate[0]][coordinate[1]] = 'X'
     
     for i in range(0, len(highlighted_maze)):
-        for j in range(0, len(highlighted_maze[0])):
-            print(highlighted_maze[i][j], end='')
-    pass
+        print(''.join(highlighted_maze[i]))
+
+    _area = area(sorted(visited))
+
+    for i in range(0, len(highlighted_maze)):
+        print(''.join(highlighted_maze[i]))
     
-solve_part_one("day10.txt")
-solve_part_two("day10_test_2.txt")
+    return find_interior_points(visited, _area)
+    
+print(solve_part_one("day10.txt"))
+print(solve_part_two("day10_test_2.txt"))

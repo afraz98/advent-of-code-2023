@@ -1,20 +1,17 @@
 def parse_input(filename):
     return [[c for c in line.strip('\n')] for line in open(filename, 'r')]
 
-def find_reflection_rows(map):
-    pass
-
-def find_reflection_columns(map):
+def print_map(map):
+    for row in range(len(map)):
+        print(map[row])
     pass
 
 def solve_part_one(filename):
     map = parse_input(filename)
-    pass
+    print_map(map)
 
 def solve_part_two(filename):
     map = parse_input(filename)
-    pass
 
-solve_part_one("day13_test.txt")
-solve_part_two("day13_test.txt")
-
+solve_part_one("day16_test.txt")
+solve_part_two("day16_test.txt")
