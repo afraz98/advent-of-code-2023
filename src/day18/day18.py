@@ -29,7 +29,8 @@ def is_valid(screen, number_rows, number_cols, x, y, previous_color, new_color):
     if x < 0 or x >= number_rows or y < 0 or y >= number_cols or screen[x][y]!= previous_color or screen[x][y]== new_color:
         return False
     return True
- 
+
+# Flood-Fill algorithm adapted from here: https://www.geeksforgeeks.org/flood-fill-algorithm/ 
 def flood_fill(area, number_rows, number_cols, x, y, previous_color, new_color):
     queue = []
      
@@ -96,7 +97,6 @@ def solve_part_one(filename):
         for i in range(len(dig_site[0])):
             if dig_site[j][i] == "#":
                 count += 1
-    
     return count
 
 print(solve_part_one("day18_test.txt"))
