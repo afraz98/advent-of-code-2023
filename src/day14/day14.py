@@ -3,7 +3,7 @@ def calculate_load(map, rock):
 
 def display_map(map):
     for i in range(0, len(map)):
-        print(map[i])
+        print(''.join(map[i]))
 
 def tilt_rocks_up(map, round_rocks):
     for i in range(len(round_rocks)):
@@ -70,12 +70,22 @@ def solve_part_two(filename):
     
     # NWSE    
     tilt_rocks_up(map, round_rocks)
+    display_map(map)
+    print()
+
     tilt_rocks_left(map, round_rocks)
+    display_map(map)
+    print()
+    
     tilt_rocks_down(map, round_rocks)
+    display_map(map)
+    print()
+
     tilt_rocks_right(map, round_rocks)
     display_map(map)
+    print()
 
     return sum([calculate_load(map, rock) for rock in round_rocks])
 
-print(solve_part_one("day14_test.txt"))
+# print(solve_part_one("day14_test.txt"))
 print(solve_part_two("day14_test.txt"))
