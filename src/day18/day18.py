@@ -41,9 +41,7 @@ def flood_fill(area, number_rows, number_cols, x, y, previous_color, new_color):
     # Color the pixel with the new color
     area[x][y] = new_color
  
-    # While the queue is not empty i.e. the 
-    # whole component having previous_color color 
-    # is not colored with new_color color
+    # While the queue is not empty i.e. the whole component having previous_color is not colored with new_color
     while queue:
          
         # Dequeue the front node
@@ -73,24 +71,30 @@ def flood_fill(area, number_rows, number_cols, x, y, previous_color, new_color):
 def solve_part_one(filename):
     instructions = parse_input(filename)
     vertices = []
+    corrected_vertices = []
     current_position = (0,0)
 
     # Find vertices of the dig site
     for instruction in instructions:
         current_position = parse_instruction(instruction, current_position, vertices)
 
-    dig_site = [["." for i in range(max(vertices)[1]+1) ] for j in range(max(vertices)[0]+1)] 
+    y_factor = sorted(vertices, key=lambda x: x[1])[0][1]
+    x_factor = sorted(vertices, key=lambda x: x[0])[0][0]
 
-    # Place vertices on dig site map    
-    current_position = (0,0)
-    for position in vertices:
+    for l in range(len(vertices)):
+        corrected_vertices.append((vertices[l][0] + abs(x_factor), vertices[l][1] + abs(y_factor)))
+
+    dig_site = [["." for i in range(500) ] for j in range(500)]
+    print(len(dig_site), len(dig_site[0]))
+    for position in corrected_vertices:
+        print(position[0], position[1])
         dig_site[position[0]][position[1]] = '#'
         
     # Use Flood-Fill algorithm to fill in the center of the dig site
-    flood_fill(dig_site, len(dig_site), len(dig_site[0]), 1, 1, ".", "#")
+    flood_fill(dig_site, len(dig_site), len(dig_site[0]), corrected_vertices[-1][0], corrected_vertices[-1][1], ".", "#")
     
     for j in range(len(dig_site)):
-        print(''.join(dig_site[j]))
+       print(''.join(dig_site[j]))
 
     count = 0
     for j in range(len(dig_site)):
@@ -99,4 +103,4 @@ def solve_part_one(filename):
                 count += 1
     return count
 
-print(solve_part_one("day18_test.txt"))
+print(solve_part_one("day18.txt"))
