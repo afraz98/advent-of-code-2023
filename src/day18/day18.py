@@ -85,16 +85,77 @@ def solve_part_one(filename):
         corrected_vertices.append((vertices[l][0] + abs(x_factor), vertices[l][1] + abs(y_factor)))
 
     dig_site = [["." for i in range(500) ] for j in range(500)]
-    print(len(dig_site), len(dig_site[0]))
     for position in corrected_vertices:
-        print(position[0], position[1])
         dig_site[position[0]][position[1]] = '#'
         
     # Use Flood-Fill algorithm to fill in the center of the dig site
     flood_fill(dig_site, len(dig_site), len(dig_site[0]), corrected_vertices[-1][0], corrected_vertices[-1][1], ".", "#")
-    
+
+    count = 0
     for j in range(len(dig_site)):
-       print(''.join(dig_site[j]))
+        for i in range(len(dig_site[0])):
+            if dig_site[j][i] == "#":
+                count += 1
+    return count
+
+def parse_op_code(opcode):
+    distance = int(opcode[1:-1], 16)
+    directions = {'0':'R', '1':'D', '2':'L', '3':'U'}
+    direction = directions[opcode[-1]]
+    return direction, distance
+
+def parse_instruction_hex_codes(instruction, current_position, vertices):
+    _, _, opcode = instruction.split(" ")
+    direction, distance = parse_op_code(opcode.strip("()"))
+    
+    vertices.append(current_position)
+    if direction == 'D':
+        for x in range(int(distance)):
+            current_position = (current_position[0] + 1, current_position[1])
+            vertices.append(current_position)
+    
+    if direction == 'U':
+        for x in range(int(distance)):
+            current_position = (current_position[0] - 1, current_position[1])
+            vertices.append(current_position)
+        
+    if direction == 'L':
+        for x in range(int(distance)):
+            current_position = (current_position[0], current_position[1] - 1)
+            vertices.append(current_position)
+    
+    if direction == 'R':
+        for x in range(int(distance)):
+            current_position = (current_position[0], current_position[1] + 1)
+            vertices.append(current_position)
+    return current_position
+
+def solve_part_two(filename):
+    instructions = parse_input(filename)
+    vertices = []
+    corrected_vertices = []
+    current_position = (0,0)
+
+    # Find vertices of the dig site
+    for instruction in instructions:
+        current_position = parse_instruction_hex_codes(instruction, current_position, vertices)
+
+    y_factor = sorted(vertices, key=lambda x: x[1])[0][1]
+    x_factor = sorted(vertices, key=lambda x: x[0])[0][0]
+
+    for l in range(len(vertices)):
+        corrected_vertices.append((vertices[l][0] + abs(x_factor), vertices[l][1] + abs(y_factor)))
+
+    # TODO: With the large distance sizes I'm seeing in the example data, 
+    #       it probably isn't realistic to store every single coordinate in a 2D matrix.
+    dig_site = [["." for i in range(1000000)] for j in range(1000000)]
+
+    
+    for position in corrected_vertices:
+        dig_site[position[0]][position[1]] = '#'
+        
+    # Use Flood-Fill algorithm to fill in the center of the dig site
+    flood_fill(dig_site, len(dig_site), len(dig_site[0]), corrected_vertices[-1][0], corrected_vertices[-1][1], ".", "#")
 
     count = 0
     for j in range(len(dig_site)):
@@ -104,3 +165,4 @@ def solve_part_one(filename):
     return count
 
 print(solve_part_one("day18.txt"))
+solve_part_two("day18_test.txt")
