@@ -2,7 +2,7 @@ def parse_input(filename):
     return [line.strip('\n') for line in open(filename, 'r')]
 
 def parse_instruction(instruction, current_position, vertices):
-    direction, distance, color = instruction.split(" ")
+    direction, distance, _ = instruction.split(" ")
     vertices.append(current_position)
     if direction == 'D':
         for x in range(int(distance)):
@@ -149,7 +149,6 @@ def solve_part_two(filename):
     # TODO: With the large distance sizes I'm seeing in the example data, 
     #       it probably isn't realistic to store every single coordinate in a 2D matrix.
     dig_site = [["." for i in range(1000000)] for j in range(1000000)]
-
     
     for position in corrected_vertices:
         dig_site[position[0]][position[1]] = '#'
