@@ -70,25 +70,12 @@ def tilt_rocks_right(map):
 # Work in progress
 def solve_part_two(filename):
     map = [[c for c in line.strip('\n')] for line in open(filename, 'r')]
-    display_map(map)
-    print()
-    
-    tilt_rocks_up(map)
-    display_map(map)
-    print()
 
-    tilt_rocks_left(map)
-    display_map(map)
-    print()
-
-    tilt_rocks_down(map)
-    display_map(map)
-    print()
-
-    tilt_rocks_right(map)
-    display_map(map)
-    print()
-
+    for i in range(1000):    
+        tilt_rocks_up(map)
+        tilt_rocks_left(map)
+        tilt_rocks_down(map)
+        tilt_rocks_right(map)
 
     sum = 0    
     for row in range(len(map)):
@@ -98,4 +85,4 @@ def solve_part_two(filename):
     return sum
 
 print(solve_part_one("day14_test.txt"))
-print(solve_part_two("day14_test.txt"))
+print(solve_part_two("day14.txt"))
