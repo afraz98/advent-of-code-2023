@@ -6,29 +6,59 @@ def print_map(map):
         print(''.join(map[row]))
     pass
 
-def traverse_map(x, y, x_prev, y_prev, map):
+def traverse_map(x, y, dx, dy, map):
+
     if x < 0 or x >= len(map[0]):
         return 0
     
-    if y < 0 or x >= len(map):
+    if y < 0 or y >= len(map):
         return 0
 
-    if map[y][x] == "." and x == 0 and y == 0:
-        return 1 + traverse_map(x+1, y, x, y, map)
-    
-    if map[y][x] == "-": 
-        if y_prev == y - 1 or y_prev == y + 1:
-            return 1 + traverse_map(x-1, y, x, y, map) + traverse_map(x+1, y, x, y, map)
+    print(y, x, dx, dy)
+    print(map[y][x])
 
-    if map[y][x] == "|" and (x_prev == x - 1 or x_prev == x + 1):
-        return 1 + traverse_map(x, y+1, x, y, map) + traverse_map(x, y-1, x, y, map)
+    if map[y][x] == ".":
+        return 1 + traverse_map(x + dx, y + dy, dx, dy, map)
+
+    if map[y][x] == "-":
+        if dy != 0: # Approaching from top/bottom
+            return 1 + traverse_map(x + 1, y, 1, 0, map) + traverse_map(x-1, y, 1, 0, map)
+        else:       # Continue as normal
+            return 1 + traverse_map(x + dx, y + dy, dx, dy, map)
+    
+    if map[y][x] == "|":
+        if dx != 0: # Approaching from either side
+            return 1 + traverse_map(x, y+1, 0, 1, map) + traverse_map(x, y-1, 0, -1, map)
+        else:       # Continue as normal
+            return 1 + traverse_map(x + dx, y + dy, dx, dy, map)    
+    
+    if map[y][x] == "\\":
+        if dx > 0:
+            return 1 + traverse_map(x, y + 1, 0, 1, map)
+        if dx < 0:
+            return 1 + traverse_map(x, y - 1, 0, -1, map)
+        if dy > 0:
+            return 1 + traverse_map(x + 1, y, 1, 0, map)
+        else:
+            return 1 + traverse_map(x - 1, y, -1, 0, map)
+        
+    if map[y][x] == "/":
+        if dx > 0:
+            return 1 + traverse_map(x, y - 1, 0, -1, map)
+        if dx < 0:
+            return 1 + traverse_map(x, y + 1, 0, 1, map)
+        if dy > 0:
+            return 1 + traverse_map(x - 1, y, -1, 0, map)
+        if dy < 0:
+            return 1 + traverse_map(x + 1, y, 1, 0, map)
     
     return 0
 
 def solve_part_one(filename):
     map = parse_input(filename)
     print_map(map)
-    return traverse_map(0, 0, 0, 0, map)
+
+    return traverse_map(0, 0, 1, 0, map)
 
 def solve_part_two(filename):
     map = parse_input(filename)

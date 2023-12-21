@@ -1,5 +1,6 @@
 def find_permutations(line):
     characters, counts = line.split(" ")
+    print(characters, counts)
     return 0
 
 def solve_part_one(filename):

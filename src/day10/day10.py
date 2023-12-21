@@ -115,5 +115,5 @@ def solve_part_two(filename):
     pts, visited = result
     visited = list(visited)
     return picks_theorem(pts // 2, shoelace_formula(visited))
-    
+
 print(solve_part_two("day10_test.txt"))
