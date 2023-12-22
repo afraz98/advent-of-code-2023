@@ -6,65 +6,80 @@ def print_map(map):
         print(''.join(map[row]))
     pass
 
-def traverse_map(map):
-    # TODO: For some reason this loops infinitely...
+def traverse_map(sx, sy, sdx, sdy, matrix):
     visited = set()
-    photons = [(0,0,1,0)]
+    photons = [(sx, sy, sdx, sdy)]
 
     while photons != []:
-        x, y, dx, dy = photons.pop(0)
-        # print(y, x, dx, dy)
-
-        if x < 0 or x >= len(map[0]):
+        x, y, dx, dy = photons.pop()
+        
+        if x < 0 or x >= len(matrix[0]):
             continue
         
-        if y < 0 or y >= len(map):
+        if y < 0 or y >= len(matrix):
             continue
 
-        visited.add((x,y)) 
+        visited.add((x, y, dx, dy)) 
 
-        if map[y][x] == ".":
-            photons.append((x + dx, y + dy, dx, dy))
+        if matrix[y][x] == ".":
+            if (x + dx, y + dy, dx, dy) not in visited:
+                photons.append((x + dx, y + dy, dx, dy))
 
-        if map[y][x] == "-":
-            if dy != 0: # Approaching from top/bottom
-                photons.append((x+1, y, 1, 0))
-                photons.append((x-1, y, -1, 0))
-            else:       # Continue as normal
-                photons.append((x + dx, y+dy, dx, dy))
+        if matrix[y][x] == "-":
+            if dy != 0:
+                if (x+1, y, 1, 0) not in visited:
+                    photons.append((x+1, y, 1, 0))
+                if (x-1, y, -1, 0) not in visited:
+                    photons.append((x-1, y, -1, 0))
+            else:
+                if (x + dx, y+dy, dx, dy) not in visited:
+                    photons.append((x + dx, y+dy, dx, dy))
         
-        if map[y][x] == "|":
-            if dx != 0: # Approaching from either side
-                photons.append((x, y+1, 0, 1))
-                photons.append((x, y-1, 0, -1))
-            else:       # Continue as normal                
-                photons.append((x, y + dy, 0, dy))
-        
-        if map[y][x] == "\\":
+        if matrix[y][x] == "|":
+            if dx != 0:
+                if (x, y+1, 0, 1) not in visited:
+                    photons.append((x, y+1, 0, 1))
+                
+                if (x, y-1, 0, -1) not in visited:
+                    photons.append((x, y-1, 0, -1))
+            else:
+                if (x, y + dy, 0, dy) not in visited:          
+                    photons.append((x, y + dy, 0, dy))
+
+        if matrix[y][x] == "\\":
             if dx > 0:
-                photons.append((x, y + 1, 0, 1))
+                if (x, y + 1, 0, 1) not in visited:
+                    photons.append((x, y + 1, 0, 1))
             if dx < 0:
-                photons.append((x, y - 1, 0, -1))
+                if (x, y - 1, 0, -1) not in visited:
+                    photons.append((x, y - 1, 0, -1))
             if dy > 0:
-                photons.append((x + 1, y, 1, 0))
+                if (x + 1, y, 1, 0) not in visited:
+                    photons.append((x + 1, y, 1, 0))
             if dy < 0:
-                photons.append((x - 1, y, -1, 0))
+                if (x - 1, y, -1, 0) not in visited:
+                    photons.append((x - 1, y, -1, 0))
             
-        if map[y][x] == "/":
+        if matrix[y][x] == "/":
             if dx > 0:
-                photons.append((x, y - 1, 0, -1))
+                if (x, y - 1, 0, -1) not in visited:
+                    photons.append((x, y - 1, 0, -1))
             if dx < 0:
-                photons.append((x, y + 1, 0, 1))
+                if (x, y + 1, 0, 1) not in visited:
+                    photons.append((x, y + 1, 0, 1))
             if dy > 0:
-                photons.append((x - 1, y, -1, 0))
+                if (x - 1, y, -1, 0) not in visited:
+                    photons.append((x - 1, y, -1, 0))
             if dy < 0:
-                photons.append((x + 1, y, 1, 0))
-        print(len(visited))
-    return len(visited)
+                if (x + 1, y, 1, 0) not in visited:
+                    photons.append((x + 1, y, 1, 0))
+    return len(set(map(lambda x: (x[0], x[1]), visited)))
 
 def solve_part_one(filename):
-    map = parse_input(filename)
-    print_map(map)
-    return traverse_map(map)
+    return traverse_map(0, 0, 1, 0, parse_input(filename))
 
-print(solve_part_one("day16.txt"))
+def solve_part_two(filename):
+    return traverse_map(0, 0, 1, 0, parse_input(filename))
+
+print(solve_part_one("day16_test.txt"))
+# print(solve_part_two("day16.txt"))
