@@ -6,61 +6,66 @@ def print_map(map):
         print(''.join(map[row]))
     pass
 
-def traverse_map(x, y, dx, dy, map):
+def traverse_map(map):
+    visited = set()
+    photons = [(0,0,1,0)]
 
-    if x < 0 or x >= len(map[0]):
-        return 0
-    
-    if y < 0 or y >= len(map):
-        return 0
+    while photons != []:
+        x, y, dx, dy = photons.pop(0)
+        # print(y, x, dx, dy)
 
-    print(y, x, dx, dy)
-    print(map[y][x])
-
-    if map[y][x] == ".":
-        return 1 + traverse_map(x + dx, y + dy, dx, dy, map)
-
-    if map[y][x] == "-":
-        if dy != 0: # Approaching from top/bottom
-            return 1 + traverse_map(x + 1, y, 1, 0, map) + traverse_map(x-1, y, 1, 0, map)
-        else:       # Continue as normal
-            return 1 + traverse_map(x + dx, y + dy, dx, dy, map)
-    
-    if map[y][x] == "|":
-        if dx != 0: # Approaching from either side
-            return 1 + traverse_map(x, y+1, 0, 1, map) + traverse_map(x, y-1, 0, -1, map)
-        else:       # Continue as normal
-            return 1 + traverse_map(x + dx, y + dy, dx, dy, map)    
-    
-    if map[y][x] == "\\":
-        if dx > 0:
-            return 1 + traverse_map(x, y + 1, 0, 1, map)
-        if dx < 0:
-            return 1 + traverse_map(x, y - 1, 0, -1, map)
-        if dy > 0:
-            return 1 + traverse_map(x + 1, y, 1, 0, map)
-        else:
-            return 1 + traverse_map(x - 1, y, -1, 0, map)
+        if x < 0 or x >= len(map[0]):
+            continue
         
-    if map[y][x] == "/":
-        if dx > 0:
-            return 1 + traverse_map(x, y - 1, 0, -1, map)
-        if dx < 0:
-            return 1 + traverse_map(x, y + 1, 0, 1, map)
-        if dy > 0:
-            return 1 + traverse_map(x - 1, y, -1, 0, map)
-        if dy < 0:
-            return 1 + traverse_map(x + 1, y, 1, 0, map)
-    
-    return 0
+        if y < 0 or y >= len(map):
+            continue
+
+        visited.add((x,y)) 
+
+        if map[y][x] == ".":
+            photons.append((x + dx, y + dy, dx, dy))
+
+        if map[y][x] == "-":
+            if dy != 0: # Approaching from top/bottom
+                photons.append((x+1, y, 1, 0))
+                photons.append((x-1, y, -1, 0))
+            else:       # Continue as normal
+                photons.append((x + dx, y+dy, dx, dy))
+        
+        if map[y][x] == "|":
+            if dx != 0: # Approaching from either side
+                photons.append((x, y+1, 0, 1))
+                photons.append((x, y-1, 0, -1))
+            else:       # Continue as normal                
+                photons.append((x, y + dy, 0, dy))
+        
+        if map[y][x] == "\\":
+            if dx > 0:
+                photons.append((x, y + 1, 0, 1))
+            if dx < 0:
+                photons.append((x, y - 1, 0, -1))
+            if dy > 0:
+                photons.append((x + 1, y, 1, 0))
+            if dy < 0:
+                photons.append((x - 1, y, -1, 0))
+            
+        if map[y][x] == "/":
+            if dx > 0:
+                photons.append((x, y - 1, 0, -1))
+            if dx < 0:
+                photons.append((x, y + 1, 0, 1))
+            if dy > 0:
+                photons.append((x - 1, y, -1, 0))
+            if dy < 0:
+                photons.append((x + 1, y, 1, 0))
+        print(len(visited))
+    return len(visited)
 
 def solve_part_one(filename):
     map = parse_input(filename)
     print_map(map)
+    return traverse_map(map)
 
-    return traverse_map(0, 0, 1, 0, map)
-
-def solve_part_two(filename):
-    map = parse_input(filename)
-
-print(solve_part_one("day16_test.txt"))
+# print(solve_part_one("day16_test_1.txt"))
+# print(solve_part_one("day16_test.txt"))
+print(solve_part_one("day16.txt"))
