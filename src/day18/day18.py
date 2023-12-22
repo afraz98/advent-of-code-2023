@@ -110,25 +110,35 @@ def parse_instruction_hex_codes(instruction, current_position, vertices):
     
     vertices.append(current_position)
     if direction == 'D':
-        for x in range(int(distance)):
-            current_position = (current_position[0] + 1, current_position[1])
-            vertices.append(current_position)
+        current_position = (current_position[0] + int(distance), current_position[1])
+        vertices.append(current_position)
     
     if direction == 'U':
-        for x in range(int(distance)):
-            current_position = (current_position[0] - 1, current_position[1])
-            vertices.append(current_position)
+        current_position = (current_position[0] - int(distance), current_position[1])
+        vertices.append(current_position)
         
     if direction == 'L':
-        for x in range(int(distance)):
-            current_position = (current_position[0], current_position[1] - 1)
-            vertices.append(current_position)
+        current_position = (current_position[0], current_position[1] - int(distance))
+        vertices.append(current_position)
     
     if direction == 'R':
-        for x in range(int(distance)):
-            current_position = (current_position[0], current_position[1] + 1)
-            vertices.append(current_position)
+        current_position = (current_position[0], current_position[1] + int(distance))
+        vertices.append(current_position)
     return current_position
+
+def shoelace_formula(vertices):
+    return abs(sum([(vertices[i][0] * (vertices[(i+1)%len(vertices)][1] - vertices[i-1][1])) for i in range(0, len(vertices))])) // 2
+
+def find_interior_points(area, boundary_points):
+    # Modified Pick's Theorem to solve for interior points
+    return area - (boundary_points // 2) + 1
+
+def perimeter(vertices):
+    # Find total perimeter from ranges found parsing hex codes
+    return sum([abs(vertices[i][0] - vertices[(i+1)%len(vertices)][0]) + abs(vertices[i][1] - vertices[(i+1)%len(vertices)][1]) for i in range(0, len(vertices))])
+
+def shape_area(vertices):
+    return find_interior_points(shoelace_formula(vertices), perimeter(vertices)) + perimeter(vertices)
 
 def solve_part_two(filename):
     instructions = parse_input(filename)
@@ -143,25 +153,11 @@ def solve_part_two(filename):
     y_factor = sorted(vertices, key=lambda x: x[1])[0][1]
     x_factor = sorted(vertices, key=lambda x: x[0])[0][0]
 
+    # Correct vertices such that minimum x, y values are >= 0
     for l in range(len(vertices)):
         corrected_vertices.append((vertices[l][0] + abs(x_factor), vertices[l][1] + abs(y_factor)))
 
-    # TODO: With the large distance sizes I'm seeing in the example data, 
-    #       it probably isn't realistic to store every single coordinate in a 2D matrix.
-    dig_site = [["." for i in range(1000000)] for j in range(1000000)]
-    
-    for position in corrected_vertices:
-        dig_site[position[0]][position[1]] = '#'
-        
-    # Use Flood-Fill algorithm to fill in the center of the dig site
-    flood_fill(dig_site, len(dig_site), len(dig_site[0]), corrected_vertices[-1][0], corrected_vertices[-1][1], ".", "#")
-
-    count = 0
-    for j in range(len(dig_site)):
-        for i in range(len(dig_site[0])):
-            if dig_site[j][i] == "#":
-                count += 1
-    return count
+    return shape_area(corrected_vertices)
 
 print(solve_part_one("day18.txt"))
-solve_part_two("day18_test.txt")
+print(solve_part_two("day18.txt"))

@@ -80,8 +80,7 @@ def solve_part_one(filename):
 
 def solve_part_two(filename):
     map = parse_input(filename)
-    outer_ring = [(x, 0, 0, 1) for x in range(0, len(map[0]))] + [(x, len(map), 0, -1) for x in range (0, len(map[0]))] + [(0, y, 1, 0) for y in range(0, len(map))] + [(len(map[0])-1, y, -1, 0) for y in range(0, len(map))]
-    return max([traverse_map(x, y, dx, dy, map) for (x,y,dx,dy) in outer_ring])
+    return max([traverse_map(x, y, dx, dy, map) for (x,y,dx,dy) in [(x, 0, 0, 1) for x in range(0, len(map[0]))] + [(x, len(map), 0, -1) for x in range (0, len(map[0]))] + [(0, y, 1, 0) for y in range(0, len(map))] + [(len(map[0])-1, y, -1, 0) for y in range(0, len(map))]])
 
 print(solve_part_one("day16_test.txt"))
 print(solve_part_two("day16.txt"))

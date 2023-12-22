@@ -81,27 +81,23 @@ def traverse_maze(data, start, direction):
         distance += 1
     return (distance, visited)
 
-def shoelace_formula(visited):
-    area = 0
-    for index in range(len(visited)):
-        area += (visited[index][0] * visited[(index + 1) % len(visited)][1]) - (visited[index][1] * visited[(index + 1) % len(visited)][0])
-    return abs(area) / 2
 
-def picks_theorem(points, area):
-    return area - (points / 2) + 1
+def shoelace_formula(vertices):
+    return abs(sum([(vertices[i][0] * (vertices[(i+1)%len(vertices)][1] - vertices[i-1][1])) for i in range(0, len(vertices))])) // 2
+
+def find_interior_points(area, boundary_points):
+    # Modified Pick's Theorem to solve for interior points
+    return area - (boundary_points // 2) + 1
 
 def solve_part_one(filename):
     # *Heavily* based on a post by 'RedTwinkleToes' on the solution page for Day 10.
     # https://www.reddit.com/r/adventofcode/comments/18evyu9/2023_day_10_solutions/
     maze = [line for line in open(filename, 'r')]
-    S = []
 
     for (dx,dy) in [up, down, left, right]:
         result = traverse_maze(maze, find_start(maze), (dx,dy))
         if result is not None:
-            S.append((dx, dy))
             break
-    tiles["S"] = S
     return result[0] // 2
 
 def solve_part_two(filename):
@@ -112,8 +108,8 @@ def solve_part_two(filename):
         if result is not None:
             break
 
-    pts, visited = result
-    visited = list(visited)
-    return picks_theorem(pts // 2, shoelace_formula(visited))
+    _, visited = result
+    return find_interior_points(shoelace_formula(list(visited)), len(visited))
 
+print(solve_part_one("day10.txt"))
 print(solve_part_two("day10_test.txt"))
