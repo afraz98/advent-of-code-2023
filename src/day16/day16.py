@@ -7,6 +7,7 @@ def print_map(map):
     pass
 
 def traverse_map(map):
+    # TODO: For some reason this loops infinitely...
     visited = set()
     photons = [(0,0,1,0)]
 
@@ -66,6 +67,4 @@ def solve_part_one(filename):
     print_map(map)
     return traverse_map(map)
 
-# print(solve_part_one("day16_test_1.txt"))
-# print(solve_part_one("day16_test.txt"))
 print(solve_part_one("day16.txt"))
