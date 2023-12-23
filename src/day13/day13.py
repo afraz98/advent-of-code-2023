@@ -2,19 +2,23 @@ def parse_input(filename):
     return [[c for c in line.strip('\n')] for line in open(filename, 'r')]
 
 def find_reflection_rows(map):
-    pass
+    for i in range(1, len(map)):
+        if all([map[i+j] == map[i-1+j] for j in range(i-len(map))]):
+            return i - 1
+    return 0
 
 def find_reflection_columns(map):
-    pass
+    for i in range(1, len(map[0])):
+        if all([[map[x][i-1+j] for x in range(len(map))] == [map[x][i+j] for x in range(len(map))] for j in range(i-len(map[0]))]):
+            i - 1
+    return 0
 
 def solve_part_one(filename):
     map = parse_input(filename)
-    pass
+    return 100 * find_reflection_rows(map) + find_reflection_columns(map)
 
 def solve_part_two(filename):
-    map = parse_input(filename)
     pass
 
-solve_part_one("day13_test.txt")
-solve_part_two("day13_test.txt")
+print(solve_part_one("day13_test.txt"))
 

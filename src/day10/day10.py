@@ -83,7 +83,7 @@ def traverse_maze(data, start, direction):
 
 
 def shoelace_formula(vertices):
-    return abs(sum([(vertices[i][0] * (vertices[(i+1)%len(vertices)][1] - vertices[i-1][1])) for i in range(0, len(vertices))])) // 2
+    return abs(sum([(vertices[i][0] * (vertices[(i+1) % len(vertices)][1] - vertices[i-1][1])) for i in range(0, len(vertices))])) // 2
 
 def find_interior_points(area, boundary_points):
     # Modified Pick's Theorem to solve for interior points
@@ -108,8 +108,15 @@ def solve_part_two(filename):
         if result is not None:
             break
 
+    highlighted_maze = [[c for c in line.strip()] for line in open(filename, 'r')]
     _, visited = result
+    
+    for point in visited:
+        highlighted_maze[point[1]][point[0]] = '#'
+    print_maze(highlighted_maze)
+
+
     return find_interior_points(shoelace_formula(list(visited)), len(visited))
 
 print(solve_part_one("day10.txt"))
-print(solve_part_two("day10_test.txt"))
+print(solve_part_two("day10.txt"))
