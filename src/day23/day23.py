@@ -13,16 +13,19 @@ def find_exit(maze):
             return i, len(maze)-1
     return -1,-1
 
+def depth_first_search(x, y, end_x, end_y, visited, maze):
+    visited.add((x,y))
+    pass
+
+def traverse_maze(maze, x, y, end_x, end_y):
+    visited = set()
+    depth_first_search(x, y, end_x, end_y, visited, maze)
+    return 0
+
 def longest_path(maze):
-    # This sounds like A* but with longest path length. 
-    # Could also find all possible paths and maximize distance (?)
-    # More on A*: https://www.geeksforgeeks.org/a-search-algorithm/
     start_x, start_y = find_start(maze)
     end_x, end_y = find_exit(maze)
-
-    print(start_x, start_y)
-    print(end_x, end_y)
-    return 0
+    return traverse_maze(maze, start_x, start_y, end_x, end_y)
 
 def solve_part_one(filename):
     return longest_path(parse_input(filename))
