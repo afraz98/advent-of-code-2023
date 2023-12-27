@@ -53,3 +53,10 @@ In this example, if you disconnect the wire between hfx/pzl, the wire between bv
 Multiplying the sizes of these groups together produces 54.
 
 Find the three wires you need to disconnect in order to divide the components into two separate groups. What do you get if you multiply the sizes of these two groups together?
+
+## Dependencies
+
+```
+sudo apt install graphviz
+pip3 install graphviz
+```
