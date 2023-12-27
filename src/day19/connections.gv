@@ -1,0 +1,38 @@
+graph connections {
+	in
+	px
+	qqz
+	qkq
+	rfg
+	qs
+	hdj
+	crn
+	gd
+	lnx
+	pv
+	in -- px [label="s<1351"]
+	in -- qqz
+	px -- qkq [label="a<2006"]
+	px -- A [label="m>2090"]
+	px -- rfg
+	qqz -- qs [label="s>2770"]
+	qqz -- hdj [label="m<1801"]
+	qqz -- R
+	qkq -- A [label="x<1416"]
+	qkq -- crn
+	rfg -- gd [label="s<537"]
+	rfg -- R [label="x>2440"]
+	rfg -- A
+	qs -- A [label="s>3448"]
+	qs -- lnx
+	hdj -- A [label="m>838"]
+	hdj -- pv
+	crn -- A [label="x>2662"]
+	crn -- R
+	gd -- R [label="a>3333"]
+	gd -- R
+	lnx -- A [label="m>1548"]
+	lnx -- A
+	pv -- R [label="a>1716"]
+	pv -- A
+}
