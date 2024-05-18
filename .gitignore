@@ -161,4 +161,15 @@ cython_debug/
 
 # Puzzle inputs!
 *.txt
+
+# Should not post puzzle descriptions...
+src/day*/README.md
+C
+C
+C
+C
+C
+C
+C
+C
 *_test.txt

@@ -11,7 +11,7 @@ Python 3.8.10
 
 Run each of these solutions by doing the following:
 
-1. Edit the solve_part_one and/or solve_pair_two methods to point to the appropriate files.
+1. Edit the solve_part_one and/or solve_part_two methods to point to the appropriate files.
 2. Run the following in a terminal:
 
 ```

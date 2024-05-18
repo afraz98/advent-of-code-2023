@@ -13,3 +13,4 @@ def solve_part_one(filename):
     return sum([find_permutations(line) for line in lines])
 
 print(solve_part_one("day12_test.txt"))
+

@@ -65,10 +65,7 @@ def solve_part_two_optimized(filename):
         sum += (10*values[0]) + values[-1]
         print(temp + "->", values[0], values[-1], sum)
     return sum
-    
 
-
-
-# print(solve_part_one('day1.txt'))
-# print(solve_part_two('day1.txt'))
+print(solve_part_one('day1.txt'))
+print(solve_part_two('day1.txt'))
 print(solve_part_two_optimized('day1_test.txt'))
